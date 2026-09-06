@@ -1,0 +1,21 @@
+# Product Specification: InvestRadar AI
+
+## 1. Project Overview
+InvestRadar AI is an intelligent financial research and stock analysis platform designed to empower retail investors and analysts with institutional-grade insights. By combining multi-agent AI orchestration, real-time market data, SEC filings, and robust quantitative valuation models, the platform delivers comprehensive, data-driven investment reports.
+
+## 2. Target Audience
+* Retail investors seeking automated, deep-dive fundamental and technical research.
+* Financial enthusiasts looking for structured bull/bear arguments and risk assessments.
+* Developers and finance professionals requiring a modular, API-driven research pipeline.
+
+## 3. Core Features & Scope
+* **Authentication & User Management:** Secure login, session handling, and personalized user profiles powered by Supabase Auth and RLS.
+* **Dashboard & Market Search:** Real-time stock, ETF, and company search with watchlist tracking.
+* **Financial & SEC Data Integration:** Automated ingestion and retrieval of SEC filings (10-K, 10-Q), earnings reports, and market prices.
+* **Multi-Agent AI Orchestrator:** A sequential pipeline executing specialized analytical skills (SEC, Financial, Earnings, Technical, Valuation) followed by Bull/Bear synthesis and Risk evaluation.
+* **Automated Investment Reports:** Cleanly formatted, evidence-backed reports generated dynamically for any given ticker.
+
+## 4. Non-Functional Requirements
+* **Performance:** Fast page loads via Next.js App Router and optimized Vercel edge deployment.
+* **Security:** Strict data isolation using PostgreSQL Row Level Security (RLS).
+* **Maintainability:** Clear separation of concerns with a modular file structure and rigorous documentation guidelines.
