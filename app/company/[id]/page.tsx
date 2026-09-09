@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import type { Company, Stock, Financials, Earnings, SecFiling } from '@/types/database'
+import { AiAnalysisReport } from '@/components/AiAnalysisReport'
+import type { Company, Stock, Financials, Earnings, SecFiling, AiAnalysis } from '@/types/database'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,6 +12,7 @@ interface CompanyDetails {
   financials: Financials[]
   earnings: Earnings[]
   secFilings: SecFiling[]
+  latestAnalysis: AiAnalysis | null
 }
 
 async function getCompanyData(id: string): Promise<CompanyDetails | null> {
@@ -56,12 +58,21 @@ async function getCompanyData(id: string): Promise<CompanyDetails | null> {
       .eq('company_id', id)
       .order('filing_date', { ascending: false })
 
+    // Fetch AI analyses
+    const { data: aiAnalyses } = await supabase
+      .from('ai_analyses')
+      .select('*')
+      .eq('company_id', id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+
     return {
       company: company as Company,
       stock: (stock as Stock) || null,
       financials: (financials as Financials[]) || [],
       earnings: (earnings as Earnings[]) || [],
       secFilings: (secFilings as SecFiling[]) || [],
+      latestAnalysis: (aiAnalyses?.[0] as AiAnalysis) || null,
     }
   } catch (err) {
     console.error('Error fetching company details:', err)
@@ -81,7 +92,7 @@ export default async function CompanyDetailPage({
     notFound()
   }
 
-  const { company, stock, financials, earnings, secFilings } = companyData
+  const { company, stock, financials, earnings, secFilings, latestAnalysis } = companyData
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 p-6 md:p-10">
@@ -148,6 +159,21 @@ export default async function CompanyDetailPage({
             </div>
           </div>
         </div>
+
+        {/* AI Analysis Report Display */}
+        {latestAnalysis ? (
+          <section className="space-y-4">
+            <AiAnalysisReport analysis={latestAnalysis} />
+          </section>
+        ) : (
+          <section className="bg-slate-800/40 border border-dashed border-slate-700 rounded-2xl p-8 text-center space-y-3">
+            <div className="text-2xl">🧠</div>
+            <h3 className="text-lg font-bold text-white">No AI Analysis Report Available Yet</h3>
+            <p className="text-sm text-slate-400 max-w-xl mx-auto">
+              An AI analysis report has not been generated for {company.name} yet. Trigger the analysis API pipeline to synthesize fundamental insights and SEC filings.
+            </p>
+          </section>
+        )}
 
         {/* Valuation & Performance Grid */}
         <section className="space-y-4">
