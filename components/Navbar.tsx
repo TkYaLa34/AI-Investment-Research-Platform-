@@ -43,15 +43,28 @@ export const Navbar: React.FC = () => {
   return (
     <header className="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Logo / Brand */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <span className="p-2 bg-indigo-600 rounded-lg text-white group-hover:bg-indigo-500 transition-colors">
-            📡
-          </span>
-          <div>
-            <span className="text-xl font-bold tracking-tight text-white block">InvestRadar AI</span>
-          </div>
-        </Link>
+        {/* Logo / Brand & Nav Links */}
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-3 group">
+            <span className="p-2 bg-indigo-600 rounded-lg text-white group-hover:bg-indigo-500 transition-colors">
+              📡
+            </span>
+            <div>
+              <span className="text-xl font-bold tracking-tight text-white block">InvestRadar AI</span>
+            </div>
+          </Link>
+
+          {user && (
+            <nav className="hidden sm:flex items-center gap-4 text-sm font-medium">
+              <Link href="/" className="text-slate-300 hover:text-white transition-colors">
+                Dashboard
+              </Link>
+              <Link href="/watchlist" className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1">
+                <span>★</span> My Watchlist
+              </Link>
+            </nav>
+          )}
+        </div>
 
         {/* User Navigation / Auth Badge */}
         <div className="flex items-center gap-4">
