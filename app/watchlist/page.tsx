@@ -26,15 +26,15 @@ export default async function WatchlistPage() {
               <span className="p-2 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded-lg">
                 ★
               </span>
-              My Stock Watchlist
+              รายการหุ้นโปรดของฉัน (My Watchlist)
             </h1>
             <p className="text-slate-400 mt-1">
-              Personalized tracking list for your favorite stocks and ETFs
+              ติดตามราคาและมูลค่าหุ้นและ ETF ที่คุณสนใจเป็นพิเศษ
             </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="px-3 py-1 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-xs font-medium">
-              {items.length} {items.length === 1 ? 'Item' : 'Items'} Saved
+              บันทึกไว้ {items.length} รายการ
             </span>
           </div>
         </header>
@@ -43,15 +43,15 @@ export default async function WatchlistPage() {
         {items.length === 0 ? (
           <div className="bg-slate-800/40 border border-dashed border-slate-700 rounded-2xl p-12 text-center space-y-4">
             <div className="text-4xl text-amber-400">☆</div>
-            <h3 className="text-xl font-bold text-white">Your watchlist is currently empty</h3>
+            <h3 className="text-xl font-bold text-white">ยังไม่มีหุ้นในรายการโปรดของคุณ</h3>
             <p className="text-sm text-slate-400 max-w-md mx-auto">
-              Track companies and ETFs by adding them to your watchlist from the dashboard or company details pages.
+              คุณสามารถกดบันทึกหุ้นที่สนใจจากแผงควบคุมหลักหรือหน้ารายละเอียดบริษัทเพื่อติดตามข้อมูลอย่างใกล้ชิด
             </p>
             <Link
               href="/"
               className="inline-block bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-2.5 rounded-xl shadow-lg transition-colors"
             >
-              Explore Companies on Dashboard
+              ค้นหาหุ้นบนแผงควบคุมหลัก
             </Link>
           </div>
         ) : (
@@ -82,12 +82,12 @@ export default async function WatchlistPage() {
                       <div className="flex flex-wrap gap-2 text-xs pt-1">
                         {company.sector && (
                           <span className="bg-slate-700/50 text-slate-300 px-2.5 py-0.5 rounded-full">
-                            {company.sector}
+                            กลุ่มอุตสาหกรรม: {company.sector}
                           </span>
                         )}
                         {company.industry && (
                           <span className="bg-slate-700/30 text-slate-400 px-2.5 py-0.5 rounded-full">
-                            {company.industry}
+                            หมวดธุรกิจ: {company.industry}
                           </span>
                         )}
                       </div>
@@ -97,17 +97,17 @@ export default async function WatchlistPage() {
                   {/* Pricing metrics */}
                   <div className="pt-4 border-t border-slate-700/60 grid grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs text-slate-400">Current Price</p>
+                      <p className="text-xs text-slate-400">ราคาปัจจุบัน</p>
                       <p className="text-xl font-bold text-emerald-400 mt-0.5">
                         {stock?.current_price !== null && stock?.current_price !== undefined
                           ? `$${stock.current_price.toFixed(2)}`
-                          : 'N/A'}
+                          : 'ไม่มีข้อมูล'}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs text-slate-400">P/E Ratio</p>
+                      <p className="text-xs text-slate-400">อัตราส่วน P/E</p>
                       <p className="text-base font-semibold text-slate-200 mt-0.5">
-                        {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'N/A'}
+                        {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'ไม่มีข้อมูล'}
                       </p>
                     </div>
                   </div>
@@ -119,7 +119,7 @@ export default async function WatchlistPage() {
                         href={`/company/${company.id}`}
                         className="block w-full text-center bg-slate-700/60 hover:bg-slate-700 text-indigo-300 hover:text-white font-semibold text-xs py-2 rounded-xl border border-slate-600/50 transition-colors"
                       >
-                        View Full Company Details & Reports →
+                        ดูรายละเอียดบริษัทและรายงานวิจัย →
                       </Link>
                     </div>
                   )}

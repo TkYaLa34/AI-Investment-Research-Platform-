@@ -3,8 +3,8 @@ import { Navbar } from '@/components/Navbar'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'InvestRadar AI - Stock Research & Analytics',
-  description: 'AI-driven financial research, fundamental stock analysis, and market insights platform.',
+  title: 'InvestRadar AI - แพลตฟอร์มวิเคราะห์หุ้นและวิจัยการลงทุนด้วย AI',
+  description: 'แพลตฟอร์มวิเคราะห์ปัจจัยพื้นฐานหุ้น รายงานวิจัยการลงทุน และข้อมูลตลาดหุ้นขับเคลื่อนด้วยระบบปัญญาประดิษฐ์',
 }
 
 export default function RootLayout({
@@ -13,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="th">
       <body className="min-h-screen bg-slate-900 text-slate-100 antialiased flex flex-col">
         <Navbar />
         <main className="flex-1">

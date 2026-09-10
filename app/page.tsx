@@ -78,13 +78,13 @@ export default async function DashboardPage() {
               InvestRadar AI
             </h1>
             <p className="text-slate-400 mt-1">
-              Institutional-grade market intelligence & fundamental stock overview
+              ระบบข่าวสารการลงทุนระดับสถาบัน วิเคราะห์หุ้นและภาพรวมปัจจัยพื้นฐาน
             </p>
           </div>
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               <span className="w-2 h-2 rounded-full bg-emerald-400 mr-2 animate-pulse"></span>
-              Live Supabase Data
+              เชื่อมต่อข้อมูล Supabase สด
             </span>
           </div>
         </header>
@@ -92,28 +92,28 @@ export default async function DashboardPage() {
         {/* Top Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 backdrop-blur-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tracked Companies</p>
-            <p className="text-2xl font-bold text-white mt-2">{totalCompanies}</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">บริษัทที่ติดตามทั้งหมด</p>
+            <p className="text-2xl font-bold text-white mt-2">{totalCompanies} บริษัท</p>
           </div>
           <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 backdrop-blur-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Price Feeds</p>
-            <p className="text-2xl font-bold text-emerald-400 mt-2">{stocksWithPrices.length}</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">ราคาหุ้นเรียลไทม์</p>
+            <p className="text-2xl font-bold text-emerald-400 mt-2">{stocksWithPrices.length} ฟีดข้อมูล</p>
           </div>
           <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-5 backdrop-blur-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Avg. Market Cap</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">มูลค่าตลาดเฉลี่ย (Market Cap)</p>
             <p className="text-2xl font-bold text-indigo-400 mt-2">
-              {avgMarketCap ? `$${(avgMarketCap / 1e9).toFixed(2)}B` : 'N/A'}
+              {avgMarketCap ? `$${(avgMarketCap / 1e9).toFixed(2)} พันล้านดอลลาร์` : 'ไม่มีข้อมูล'}
             </p>
           </div>
         </div>
 
         {/* Company Cards Grid */}
         <section className="space-y-4">
-          <h2 className="text-xl font-semibold text-white tracking-wide">Market Overview Cards</h2>
+          <h2 className="text-xl font-semibold text-white tracking-wide">การ์ดสรุปสภาวะตลาด</h2>
           {companies.length === 0 ? (
             <div className="bg-slate-800/40 border border-dashed border-slate-700 rounded-xl p-12 text-center text-slate-400">
-              <p className="text-lg font-medium">No company records found in database.</p>
-              <p className="text-sm text-slate-500 mt-1">Connect or populate your Supabase tables to view market data.</p>
+              <p className="text-lg font-medium">ไม่พบข้อมูลบริษัทในฐานข้อมูล</p>
+              <p className="text-sm text-slate-500 mt-1">กรุณาเชื่อมต่อหรือเพิ่มข้อมูลบริษัทในตาราง Supabase เพื่อแสดงราคาตลาด</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -142,12 +142,12 @@ export default async function DashboardPage() {
                       <div className="mt-4 flex flex-wrap gap-2 text-xs">
                         {company.sector && (
                           <span className="bg-slate-700/50 text-slate-300 px-2.5 py-1 rounded-full">
-                            {company.sector}
+                            กลุ่มอุตสาหกรรม: {company.sector}
                           </span>
                         )}
                         {company.industry && (
                           <span className="bg-slate-700/30 text-slate-400 px-2.5 py-1 rounded-full">
-                            {company.industry}
+                            หมวดธุรกิจ: {company.industry}
                           </span>
                         )}
                       </div>
@@ -155,33 +155,33 @@ export default async function DashboardPage() {
 
                     <div className="mt-6 pt-4 border-t border-slate-700/60 grid grid-cols-2 gap-4">
                       <div>
-                        <p className="text-xs text-slate-400">Current Price</p>
+                        <p className="text-xs text-slate-400">ราคาปัจจุบัน</p>
                         <p className="text-xl font-bold text-emerald-400 mt-0.5">
                           {stock?.current_price !== null && stock?.current_price !== undefined
                             ? `$${stock.current_price.toFixed(2)}`
-                            : 'N/A'}
+                            : 'ไม่มีข้อมูล'}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-slate-400">Market Cap</p>
+                        <p className="text-xs text-slate-400">มูลค่าตามราคาตลาด</p>
                         <p className="text-base font-semibold text-slate-200 mt-0.5">
                           {company.market_cap
                             ? `$${(company.market_cap / 1e9).toFixed(2)}B`
-                            : 'N/A'}
+                            : 'ไม่มีข้อมูล'}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-slate-400">Day High / Low</p>
+                        <p className="text-xs text-slate-400">ราคาสูงสุด / ต่ำสุดประจำวัน</p>
                         <p className="text-xs font-medium text-slate-300 mt-0.5">
                           {stock?.day_high && stock?.day_low
                             ? `$${stock.day_high.toFixed(2)} / $${stock.day_low.toFixed(2)}`
-                            : 'N/A'}
+                            : 'ไม่มีข้อมูล'}
                         </p>
                       </div>
                       <div>
-                        <p className="text-xs text-slate-400">P/E Ratio</p>
+                        <p className="text-xs text-slate-400">อัตราส่วน P/E</p>
                         <p className="text-xs font-medium text-slate-300 mt-0.5">
-                          {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'N/A'}
+                          {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'ไม่มีข้อมูล'}
                         </p>
                       </div>
                     </div>
@@ -195,19 +195,19 @@ export default async function DashboardPage() {
         {/* Detailed Table View */}
         {companies.length > 0 && (
           <section className="space-y-4 pt-4">
-            <h2 className="text-xl font-semibold text-white tracking-wide">Detailed Financial & Pricing Table</h2>
+            <h2 className="text-xl font-semibold text-white tracking-wide">ตารางรายละเอียดราคาและงบการเงิน</h2>
             <div className="overflow-x-auto rounded-xl border border-slate-700/70 bg-slate-800/80 shadow-xl">
               <table className="w-full text-left text-sm text-slate-300">
                 <thead className="bg-slate-900/80 text-xs uppercase font-semibold text-slate-400 border-b border-slate-700/70">
                   <tr>
-                    <th scope="col" className="px-6 py-4">Ticker</th>
-                    <th scope="col" className="px-6 py-4">Company Name</th>
-                    <th scope="col" className="px-6 py-4">Sector</th>
-                    <th scope="col" className="px-6 py-4">Current Price</th>
-                    <th scope="col" className="px-6 py-4">Volume</th>
-                    <th scope="col" className="px-6 py-4">P/E Ratio</th>
-                    <th scope="col" className="px-6 py-4">Div Yield</th>
-                    <th scope="col" className="px-6 py-4">Market Cap</th>
+                    <th scope="col" className="px-6 py-4">ชื่อย่อหุ้น (Ticker)</th>
+                    <th scope="col" className="px-6 py-4">ชื่อบริษัท</th>
+                    <th scope="col" className="px-6 py-4">กลุ่มอุตสาหกรรม</th>
+                    <th scope="col" className="px-6 py-4">ราคาปัจจุบัน</th>
+                    <th scope="col" className="px-6 py-4">ปริมาณการซื้อขาย</th>
+                    <th scope="col" className="px-6 py-4">อัตราส่วน P/E</th>
+                    <th scope="col" className="px-6 py-4">อัตราเงินปันผลตอบแทน</th>
+                    <th scope="col" className="px-6 py-4">มูลค่าตลาด</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
@@ -217,23 +217,23 @@ export default async function DashboardPage() {
                       <tr key={company.id} className="hover:bg-slate-700/30 transition-colors">
                         <td className="px-6 py-4 font-mono font-bold text-indigo-400">{company.ticker}</td>
                         <td className="px-6 py-4 font-medium text-white">{company.name}</td>
-                        <td className="px-6 py-4 text-slate-400">{company.sector || 'N/A'}</td>
+                        <td className="px-6 py-4 text-slate-400">{company.sector || 'ไม่มีข้อมูล'}</td>
                         <td className="px-6 py-4 font-semibold text-emerald-400">
                           {stock?.current_price !== null && stock?.current_price !== undefined
                             ? `$${stock.current_price.toFixed(2)}`
-                            : 'N/A'}
+                            : 'ไม่มีข้อมูล'}
                         </td>
                         <td className="px-6 py-4 text-slate-300">
-                          {stock?.volume ? stock.volume.toLocaleString() : 'N/A'}
+                          {stock?.volume ? stock.volume.toLocaleString() : 'ไม่มีข้อมูล'}
                         </td>
                         <td className="px-6 py-4 text-slate-300">
-                          {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'N/A'}
+                          {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'ไม่มีข้อมูล'}
                         </td>
                         <td className="px-6 py-4 text-slate-300">
-                          {stock?.dividend_yield ? `${(stock.dividend_yield * 100).toFixed(2)}%` : 'N/A'}
+                          {stock?.dividend_yield ? `${(stock.dividend_yield * 100).toFixed(2)}%` : 'ไม่มีข้อมูล'}
                         </td>
                         <td className="px-6 py-4 text-slate-300">
-                          {company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'N/A'}
+                          {company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'ไม่มีข้อมูล'}
                         </td>
                       </tr>
                     )

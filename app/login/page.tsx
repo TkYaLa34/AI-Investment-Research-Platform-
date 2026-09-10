@@ -24,7 +24,7 @@ export default function LoginPage() {
         setErrorMessage(error.message)
       }
     } catch (err: any) {
-      setErrorMessage(err?.message || 'An unexpected error occurred during sign in.')
+      setErrorMessage(err?.message || 'เกิดข้อผิดพลาดไม่คาดคิดขณะเข้าสู่ระบบ')
     } finally {
       setLoading(false)
     }
@@ -39,10 +39,10 @@ export default function LoginPage() {
             📡
           </div>
           <h1 className="text-2xl font-bold text-white tracking-tight">
-            Sign in to InvestRadar AI
+            เข้าสู่ระบบ InvestRadar AI
           </h1>
           <p className="text-slate-400 text-sm">
-            Access fundamental research, AI reports, and personalized stock watchlists.
+            เข้าถึงงานวิจัยปัจจัยพื้นฐาน รายงานวิเคราะห์ AI และติดตามหุ้นโปรดส่วนบุคคล
           </p>
         </div>
 
@@ -77,11 +77,11 @@ export default function LoginPage() {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
             />
           </svg>
-          {loading ? 'Connecting to Google...' : 'Sign in with Google'}
+          {loading ? 'กำลังเชื่อมต่อกับ Google...' : 'เข้าสู่ระบบด้วย Google'}
         </button>
 
         <p className="text-center text-xs text-slate-500">
-          By signing in, you agree to our Terms of Service & Privacy Policy.
+          เมื่อเข้าสู่ระบบ แสดงว่าคุณยอมรับข้อตกลงการใช้งานและนโยบายความเป็นส่วนตัวของเรา
         </p>
       </div>
     </div>

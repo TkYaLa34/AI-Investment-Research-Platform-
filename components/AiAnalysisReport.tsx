@@ -28,21 +28,21 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
             🧠
           </span>
           <div>
-            <h3 className="text-xl font-bold text-white tracking-wide">AI Investment Analysis & Report</h3>
+            <h3 className="text-xl font-bold text-white tracking-wide">รายงานวิจัยและวิเคราะห์การลงทุนด้วย AI</h3>
             <p className="text-xs text-slate-400 mt-0.5">
-              Generated on {new Date(analysis.created_at).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' })}
+              สร้างเมื่อวันที่ {new Date(analysis.created_at).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' })}
             </p>
           </div>
         </div>
         <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-xs font-semibold">
-          AI Synthesized
+          สังเคราะห์ด้วย AI
         </span>
       </div>
 
       {/* Summary Section */}
       {analysis.summary && (
         <div className="space-y-2">
-          <h4 className="text-sm font-bold uppercase tracking-wider text-indigo-400">Executive Summary</h4>
+          <h4 className="text-sm font-bold uppercase tracking-wider text-indigo-400">บทสรุปผู้บริหาร (Executive Summary)</h4>
           <p className="text-slate-200 text-sm leading-relaxed bg-slate-900/40 border border-slate-700/40 rounded-xl p-4">
             {analysis.summary}
           </p>
@@ -55,7 +55,7 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
         {analysis.bull_case && (
           <div className="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-2">
-              <span>📈</span> Bull Case
+              <span>📈</span> ปัจจัยสนับสนุนเชิงบวก (Bull Case)
             </h4>
             <div className="text-slate-200 text-sm leading-relaxed whitespace-pre-line">
               {analysis.bull_case}
@@ -67,7 +67,7 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
         {analysis.bear_case && (
           <div className="bg-rose-950/20 border border-rose-500/30 rounded-xl p-5 space-y-3">
             <h4 className="text-sm font-bold uppercase tracking-wider text-rose-400 flex items-center gap-2">
-              <span>📉</span> Bear Case
+              <span>📉</span> ปัจจัยเสี่ยงเชิงลบ (Bear Case)
             </h4>
             <div className="text-slate-200 text-sm leading-relaxed whitespace-pre-line">
               {analysis.bear_case}
@@ -80,7 +80,7 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
       {analysis.risk_assessment && (
         <div className="bg-amber-950/20 border border-amber-500/30 rounded-xl p-5 space-y-2">
           <h4 className="text-sm font-bold uppercase tracking-wider text-amber-400 flex items-center gap-2">
-            <span>⚠️</span> Risk Assessment
+            <span>⚠️</span> การประเมินระดับความเสี่ยง (Risk Assessment)
           </h4>
           <p className="text-slate-200 text-sm leading-relaxed">
             {analysis.risk_assessment}
@@ -92,12 +92,12 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
       {(sources.length > 0 || financialHighlights.length > 0 || secFilingReferences.length > 0) && (
         <div className="border-t border-slate-700/60 pt-5 space-y-3">
           <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-2">
-            <span>🔍</span> Evidence Sources & Citations
+            <span>🔍</span> แหล่งข้อมูลอ้างอิงและหลักฐานประกอบการวิเคราะห์
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
             {sources.length > 0 && (
               <div className="bg-slate-900/60 rounded-lg p-3 space-y-1.5 border border-slate-700/50">
-                <p className="font-semibold text-slate-300">Data Sources</p>
+                <p className="font-semibold text-slate-300">แหล่งข้อมูล</p>
                 <ul className="list-disc list-inside text-slate-400 space-y-0.5">
                   {sources.map((src, i) => (
                     <li key={i}>{src}</li>
@@ -108,7 +108,7 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
 
             {financialHighlights.length > 0 && (
               <div className="bg-slate-900/60 rounded-lg p-3 space-y-1.5 border border-slate-700/50">
-                <p className="font-semibold text-slate-300">Financial Highlights</p>
+                <p className="font-semibold text-slate-300">ตัวเลขงบการเงินสำคัญ</p>
                 <ul className="list-disc list-inside text-slate-400 space-y-0.5">
                   {financialHighlights.map((hl, i) => (
                     <li key={i}>{hl}</li>
@@ -119,7 +119,7 @@ export const AiAnalysisReport: React.FC<AiAnalysisReportProps> = ({ analysis, cl
 
             {secFilingReferences.length > 0 && (
               <div className="bg-slate-900/60 rounded-lg p-3 space-y-1.5 border border-slate-700/50">
-                <p className="font-semibold text-slate-300">SEC Filing References</p>
+                <p className="font-semibold text-slate-300">อ้างอิงเอกสาร SEC</p>
                 <ul className="list-disc list-inside text-slate-400 space-y-0.5">
                   {secFilingReferences.map((ref, i) => (
                     <li key={i}>{ref}</li>

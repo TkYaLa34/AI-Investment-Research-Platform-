@@ -57,10 +57,10 @@ export const Navbar: React.FC = () => {
           {user && (
             <nav className="hidden sm:flex items-center gap-4 text-sm font-medium">
               <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
-                Dashboard
+                แผงควบคุม (Dashboard)
               </Link>
               <Link href="/watchlist" className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1">
-                <span>★</span> My Watchlist
+                <span>★</span> รายการหุ้นโปรด
               </Link>
             </nav>
           )}
@@ -102,7 +102,7 @@ export const Navbar: React.FC = () => {
                     onClick={handleSignOut}
                     className="text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 border border-slate-700 px-3 py-1.5 rounded-lg transition-colors"
                   >
-                    Sign Out
+                    ออกจากระบบ
                   </button>
                 </div>
               ) : (
@@ -110,7 +110,7 @@ export const Navbar: React.FC = () => {
                   href="/login"
                   className="text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 border border-indigo-500/30 px-4 py-2 rounded-xl shadow-md transition-colors"
                 >
-                  Sign In
+                  เข้าสู่ระบบ
                 </Link>
               )}
             </>

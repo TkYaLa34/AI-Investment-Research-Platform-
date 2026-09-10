@@ -54,7 +54,7 @@ export default async function UserDashboardPage() {
     getTrackedCompanies(),
   ])
 
-  const userName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'Investor'
+  const userName = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'นักลงทุน'
   const watchlistCount = watchlistItems.length
   const activeFeedsCount = watchlistItems.filter((i) => i.stock?.current_price !== null && i.stock?.current_price !== undefined).length
 
@@ -66,14 +66,14 @@ export default async function UserDashboardPage() {
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <span className="px-3 py-1 bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 text-xs font-semibold rounded-full">
-                Personalized Dashboard
+                แผงควบคุมส่วนบุคคล
               </span>
             </div>
             <h1 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
-              Welcome back, {userName}! 👋
+              ยินดีต้อนรับกลับ, คุณ{userName}! 👋
             </h1>
             <p className="text-slate-300 text-sm max-w-2xl leading-relaxed">
-              Track your saved stocks, view real-time valuation metrics, and access AI-driven fundamental research reports.
+              ติดตามหุ้นที่คุณบันทึกไว้ ตรวจสอบตัวชี้วัดมูลค่าเรียลไทม์ และเข้าถึงรายงานวิเคราะห์ปัจจัยพื้นฐานด้วยระบบ AI
             </p>
           </div>
 
@@ -82,7 +82,7 @@ export default async function UserDashboardPage() {
               href="/watchlist"
               className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-5 py-3 rounded-xl shadow-lg transition-colors flex items-center gap-2"
             >
-              <span>★</span> Manage Watchlist
+              <span>★</span> จัดการรายการหุ้นโปรด
             </Link>
           </div>
         </section>
@@ -90,21 +90,21 @@ export default async function UserDashboardPage() {
         {/* Quick Summary Widgets */}
         <section className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Watchlist Items</p>
-            <p className="text-3xl font-extrabold text-amber-400 mt-2">{watchlistCount}</p>
-            <p className="text-xs text-slate-400 mt-1">Saved stocks & ETFs</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">หุ้นโปรดในรายการ</p>
+            <p className="text-3xl font-extrabold text-amber-400 mt-2">{watchlistCount} หุ้น</p>
+            <p className="text-xs text-slate-400 mt-1">รายการหุ้นและ ETF ที่บันทึกไว้</p>
           </div>
 
           <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Price Feeds</p>
-            <p className="text-3xl font-extrabold text-emerald-400 mt-2">{activeFeedsCount}</p>
-            <p className="text-xs text-slate-400 mt-1">Live market data streaming</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">ฟีดราคาเรียลไทม์</p>
+            <p className="text-3xl font-extrabold text-emerald-400 mt-2">{activeFeedsCount} รายการ</p>
+            <p className="text-xs text-slate-400 mt-1">สตรีมข้อมูลราคาตลาดสด</p>
           </div>
 
           <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-5 backdrop-blur-sm">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Indexed Companies</p>
-            <p className="text-3xl font-extrabold text-indigo-400 mt-2">{allCompanies.length}</p>
-            <p className="text-xs text-slate-400 mt-1">Available for fundamental AI analysis</p>
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">บริษัทในระบบทั้งหมด</p>
+            <p className="text-3xl font-extrabold text-indigo-400 mt-2">{allCompanies.length} บริษัท</p>
+            <p className="text-xs text-slate-400 mt-1">พร้อมสำหรับวิเคราะห์ปัจจัยพื้นฐานด้วย AI</p>
           </div>
         </section>
 
@@ -112,19 +112,19 @@ export default async function UserDashboardPage() {
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-white tracking-wide flex items-center gap-2">
-              <span className="text-amber-400">★</span> My Watchlist Highlights
+              <span className="text-amber-400">★</span> หุ้นโปรดของคุณ
             </h2>
             <Link href="/watchlist" className="text-xs text-indigo-400 hover:text-indigo-300 font-semibold">
-              View All Watchlist Items →
+              ดูรายการหุ้นโปรดทั้งหมด →
             </Link>
           </div>
 
           {watchlistItems.length === 0 ? (
             <div className="bg-slate-800/40 border border-dashed border-slate-700 rounded-2xl p-10 text-center space-y-3">
               <div className="text-3xl text-amber-400">☆</div>
-              <h3 className="text-lg font-bold text-white">No stocks added to your watchlist yet</h3>
+              <h3 className="text-lg font-bold text-white">ยังไม่มีหุ้นในรายการโปรดของคุณ</h3>
               <p className="text-xs text-slate-400 max-w-md mx-auto">
-                Explore available companies below and click &quot;Add to Watchlist&quot; to customize your dashboard.
+                ค้นหาและสำรวจบริษัทด้านล่าง จากนั้นกด &quot;เพิ่มในรายการโปรด&quot; เพื่อปรับแต่งแผงควบคุมของคุณ
               </p>
             </div>
           ) : (
@@ -158,17 +158,17 @@ export default async function UserDashboardPage() {
 
                     <div className="pt-3 border-t border-slate-700/60 grid grid-cols-2 gap-3 text-xs">
                       <div>
-                        <p className="text-slate-400">Current Price</p>
+                        <p className="text-slate-400">ราคาปัจจุบัน</p>
                         <p className="text-lg font-bold text-emerald-400 mt-0.5">
                           {stock?.current_price !== null && stock?.current_price !== undefined
                             ? `$${stock.current_price.toFixed(2)}`
-                            : 'N/A'}
+                            : 'ไม่มีข้อมูล'}
                         </p>
                       </div>
                       <div>
-                        <p className="text-slate-400">P/E Ratio</p>
+                        <p className="text-slate-400">อัตราส่วน P/E</p>
                         <p className="text-sm font-semibold text-slate-200 mt-0.5">
-                          {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'N/A'}
+                          {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'ไม่มีข้อมูล'}
                         </p>
                       </div>
                     </div>
@@ -178,7 +178,7 @@ export default async function UserDashboardPage() {
                         href={`/company/${company.id}`}
                         className="block text-center bg-slate-700/50 hover:bg-slate-700 text-indigo-300 hover:text-white font-semibold text-xs py-2 rounded-xl transition-colors"
                       >
-                        View Full Research & AI Report →
+                        ดูข้อมูลฉบับเต็มและรายงาน AI →
                       </Link>
                     )}
                   </div>
@@ -192,7 +192,7 @@ export default async function UserDashboardPage() {
         <section className="space-y-4 pt-4 border-t border-slate-800">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-white tracking-wide flex items-center gap-2">
-              <span>📡</span> All Tracked Companies
+              <span>📡</span> บริษัททั้งหมดในระบบ
             </h2>
           </div>
 
@@ -224,17 +224,17 @@ export default async function UserDashboardPage() {
 
                   <div className="pt-3 border-t border-slate-700/60 grid grid-cols-2 gap-3 text-xs">
                     <div>
-                      <p className="text-slate-400">Price</p>
+                      <p className="text-slate-400">ราคา</p>
                       <p className="text-base font-bold text-emerald-400 mt-0.5">
                         {stock?.current_price !== null && stock?.current_price !== undefined
                           ? `$${stock.current_price.toFixed(2)}`
-                          : 'N/A'}
+                          : 'ไม่มีข้อมูล'}
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-400">Market Cap</p>
+                      <p className="text-slate-400">มูลค่าตลาด</p>
                       <p className="text-xs font-semibold text-slate-200 mt-0.5">
-                        {company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'N/A'}
+                        {company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'ไม่มีข้อมูล'}
                       </p>
                     </div>
                   </div>
@@ -243,7 +243,7 @@ export default async function UserDashboardPage() {
                     href={`/company/${company.id}`}
                     className="block text-center bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-300 font-semibold text-xs py-2 rounded-xl border border-indigo-500/30 transition-colors"
                   >
-                    View Details & Reports →
+                    ดูรายละเอียดและรายงาน →
                   </Link>
                 </div>
               )

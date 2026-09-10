@@ -100,7 +100,7 @@ export default async function CompanyDetailPage({
         {/* Navigation / Back link */}
         <nav className="flex items-center gap-2 text-sm text-slate-400">
           <Link href="/" className="hover:text-indigo-400 transition-colors flex items-center gap-1">
-            <span>←</span> Back to Dashboard
+            <span>←</span> กลับสู่แผงควบคุมหลัก
           </Link>
           <span>/</span>
           <span className="text-slate-200 font-medium">{company.ticker}</span>
@@ -134,12 +134,12 @@ export default async function CompanyDetailPage({
               <div className="flex flex-wrap gap-2 pt-2">
                 {company.sector && (
                   <span className="bg-slate-700/60 text-slate-300 px-3 py-1 rounded-full text-xs font-medium">
-                    Sector: {company.sector}
+                    กลุ่มอุตสาหกรรม: {company.sector}
                   </span>
                 )}
                 {company.industry && (
                   <span className="bg-slate-700/40 text-slate-400 px-3 py-1 rounded-full text-xs font-medium">
-                    Industry: {company.industry}
+                    หมวดธุรกิจ: {company.industry}
                   </span>
                 )}
               </div>
@@ -147,14 +147,14 @@ export default async function CompanyDetailPage({
 
             {/* Price Badge */}
             <div className="bg-slate-900/60 border border-slate-700/60 rounded-xl p-5 md:min-w-[200px] text-right">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Current Stock Price</p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">ราคาหุ้นปัจจุบัน</p>
               <p className="text-3xl font-extrabold text-emerald-400 mt-1">
                 {stock?.current_price !== null && stock?.current_price !== undefined
                   ? `$${stock.current_price.toFixed(2)}`
-                  : 'N/A'}
+                  : 'ไม่มีข้อมูล'}
               </p>
               <p className="text-xs text-slate-400 mt-2">
-                Market Cap: {company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'N/A'}
+                มูลค่าตลาด: {company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'ไม่มีข้อมูล'}
               </p>
             </div>
           </div>
@@ -168,41 +168,41 @@ export default async function CompanyDetailPage({
         ) : (
           <section className="bg-slate-800/40 border border-dashed border-slate-700 rounded-2xl p-8 text-center space-y-3">
             <div className="text-2xl">🧠</div>
-            <h3 className="text-lg font-bold text-white">No AI Analysis Report Available Yet</h3>
+            <h3 className="text-lg font-bold text-white">ยังไม่มีรายงานการวิเคราะห์ด้วย AI สำหรับบริษัทนี้</h3>
             <p className="text-sm text-slate-400 max-w-xl mx-auto">
-              An AI analysis report has not been generated for {company.name} yet. Trigger the analysis API pipeline to synthesize fundamental insights and SEC filings.
+              ยังไม่มีการประมวลผลรายงาน AI สำหรับ {company.name} สามารถส่งคำขอไปยังระบบประมวลผล AI เพื่อสังเคราะห์วิเคราะห์ปัจจัยพื้นฐานและเอกสาร SEC
             </p>
           </section>
         )}
 
         {/* Valuation & Performance Grid */}
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-white tracking-wide">Key Valuation & Stock Metrics</h2>
+          <h2 className="text-xl font-bold text-white tracking-wide">ตัวชี้วัดมูลค่าและราคาหุ้นสำคัญ</h2>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4">
-              <p className="text-xs text-slate-400 font-medium">Day High / Low</p>
+              <p className="text-xs text-slate-400 font-medium">ราคาสูงสุด / ต่ำสุดประจำวัน</p>
               <p className="text-base font-semibold text-white mt-1">
                 {stock?.day_high && stock?.day_low
                   ? `$${stock.day_high.toFixed(2)} / $${stock.day_low.toFixed(2)}`
-                  : 'N/A'}
+                  : 'ไม่มีข้อมูล'}
               </p>
             </div>
             <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4">
-              <p className="text-xs text-slate-400 font-medium">Trading Volume</p>
+              <p className="text-xs text-slate-400 font-medium">ปริมาณการซื้อขาย</p>
               <p className="text-base font-semibold text-white mt-1">
-                {stock?.volume ? stock.volume.toLocaleString() : 'N/A'}
+                {stock?.volume ? stock.volume.toLocaleString() : 'ไม่มีข้อมูล'}
               </p>
             </div>
             <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4">
-              <p className="text-xs text-slate-400 font-medium">P/E Ratio</p>
+              <p className="text-xs text-slate-400 font-medium">อัตราส่วน P/E</p>
               <p className="text-base font-semibold text-white mt-1">
-                {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'N/A'}
+                {stock?.pe_ratio ? stock.pe_ratio.toFixed(2) : 'ไม่มีข้อมูล'}
               </p>
             </div>
             <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-4">
-              <p className="text-xs text-slate-400 font-medium">Dividend Yield</p>
+              <p className="text-xs text-slate-400 font-medium">อัตราเงินปันผลตอบแทน</p>
               <p className="text-base font-semibold text-white mt-1">
-                {stock?.dividend_yield ? `${(stock.dividend_yield * 100).toFixed(2)}%` : 'N/A'}
+                {stock?.dividend_yield ? `${(stock.dividend_yield * 100).toFixed(2)}%` : 'ไม่มีข้อมูล'}
               </p>
             </div>
           </div>
@@ -210,22 +210,22 @@ export default async function CompanyDetailPage({
 
         {/* Financial Performance Section */}
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-white tracking-wide">Financial Statements Summary</h2>
+          <h2 className="text-xl font-bold text-white tracking-wide">สรุปงบการเงินสำคัญ</h2>
           {financials.length === 0 ? (
             <div className="bg-slate-800/40 border border-dashed border-slate-700 rounded-xl p-8 text-center text-slate-400 text-sm">
-              No financial statements recorded for this company.
+              ไม่มีข้อมูลรายการงบการเงินสำหรับบริษัทนี้
             </div>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-slate-700/70 bg-slate-800/80 shadow-lg">
               <table className="w-full text-left text-sm text-slate-300">
                 <thead className="bg-slate-900/80 text-xs uppercase font-semibold text-slate-400 border-b border-slate-700/70">
                   <tr>
-                    <th scope="col" className="px-6 py-4">Fiscal Year</th>
-                    <th scope="col" className="px-6 py-4">Period</th>
-                    <th scope="col" className="px-6 py-4">Revenue</th>
-                    <th scope="col" className="px-6 py-4">Net Income</th>
-                    <th scope="col" className="px-6 py-4">Total Assets</th>
-                    <th scope="col" className="px-6 py-4">Total Liabilities</th>
+                    <th scope="col" className="px-6 py-4">ปีบัญชี</th>
+                    <th scope="col" className="px-6 py-4">รอบระยะเวลา</th>
+                    <th scope="col" className="px-6 py-4">รายได้รวม</th>
+                    <th scope="col" className="px-6 py-4">กำไรสุทธิ</th>
+                    <th scope="col" className="px-6 py-4">สินทรัพย์รวม</th>
+                    <th scope="col" className="px-6 py-4">หนี้สินรวม</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
@@ -234,16 +234,16 @@ export default async function CompanyDetailPage({
                       <td className="px-6 py-4 font-bold text-white">{fin.fiscal_year}</td>
                       <td className="px-6 py-4 text-slate-400 uppercase">{fin.fiscal_period}</td>
                       <td className="px-6 py-4 font-medium text-emerald-400">
-                        {fin.revenue ? `$${(fin.revenue / 1e6).toFixed(2)}M` : 'N/A'}
+                        {fin.revenue ? `$${(fin.revenue / 1e6).toFixed(2)}M` : 'ไม่มีข้อมูล'}
                       </td>
                       <td className="px-6 py-4 font-medium text-indigo-400">
-                        {fin.net_income ? `$${(fin.net_income / 1e6).toFixed(2)}M` : 'N/A'}
+                        {fin.net_income ? `$${(fin.net_income / 1e6).toFixed(2)}M` : 'ไม่มีข้อมูล'}
                       </td>
                       <td className="px-6 py-4 text-slate-300">
-                        {fin.total_assets ? `$${(fin.total_assets / 1e6).toFixed(2)}M` : 'N/A'}
+                        {fin.total_assets ? `$${(fin.total_assets / 1e6).toFixed(2)}M` : 'ไม่มีข้อมูล'}
                       </td>
                       <td className="px-6 py-4 text-slate-300">
-                        {fin.total_liabilities ? `$${(fin.total_liabilities / 1e6).toFixed(2)}M` : 'N/A'}
+                        {fin.total_liabilities ? `$${(fin.total_liabilities / 1e6).toFixed(2)}M` : 'ไม่มีข้อมูล'}
                       </td>
                     </tr>
                   ))}
@@ -255,10 +255,10 @@ export default async function CompanyDetailPage({
 
         {/* Quarterly Earnings Section */}
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-white tracking-wide">Earnings Performance</h2>
+          <h2 className="text-xl font-bold text-white tracking-wide">ผลการดำเนินงานผลประกอบการรายไตรมาส</h2>
           {earnings.length === 0 ? (
             <div className="bg-slate-800/40 border border-dashed border-slate-700 rounded-xl p-8 text-center text-slate-400 text-sm">
-              No earnings history available for this company.
+              ไม่มีประวัติผลประกอบการสำหรับบริษัทนี้
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -266,26 +266,26 @@ export default async function CompanyDetailPage({
                 <div key={earn.id} className="bg-slate-800/70 border border-slate-700/60 rounded-xl p-5 space-y-3">
                   <div className="flex items-center justify-between border-b border-slate-700/50 pb-2">
                     <span className="text-sm font-bold text-white">
-                      FY{earn.fiscal_year} {earn.fiscal_quarter ? `Q${earn.fiscal_quarter}` : ''}
+                      ปีงบประมาณ {earn.fiscal_year} {earn.fiscal_quarter ? `ไตรมาสที่ ${earn.fiscal_quarter}` : ''}
                     </span>
                     <span className="text-xs text-slate-400">
-                      {earn.report_date ? new Date(earn.report_date).toLocaleDateString() : 'N/A'}
+                      {earn.report_date ? new Date(earn.report_date).toLocaleDateString('th-TH') : 'ไม่มีข้อมูล'}
                     </span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <p className="text-slate-400">EPS Actual / Est.</p>
+                      <p className="text-slate-400">กำไรต่อหุ้นจริง / คาดการณ์</p>
                       <p className="text-sm font-semibold text-emerald-400 mt-0.5">
-                        {earn.eps_actual !== null ? `$${earn.eps_actual.toFixed(2)}` : 'N/A'}
+                        {earn.eps_actual !== null ? `$${earn.eps_actual.toFixed(2)}` : 'ไม่มีข้อมูล'}
                         <span className="text-slate-400 text-xs font-normal">
                           {earn.eps_estimate !== null ? ` / $${earn.eps_estimate.toFixed(2)}` : ''}
                         </span>
                       </p>
                     </div>
                     <div>
-                      <p className="text-slate-400">Revenue Actual</p>
+                      <p className="text-slate-400">รายได้จริง</p>
                       <p className="text-sm font-semibold text-slate-200 mt-0.5">
-                        {earn.revenue_actual ? `$${(earn.revenue_actual / 1e6).toFixed(2)}M` : 'N/A'}
+                        {earn.revenue_actual ? `$${(earn.revenue_actual / 1e6).toFixed(2)}M` : 'ไม่มีข้อมูล'}
                       </p>
                     </div>
                   </div>
@@ -297,20 +297,20 @@ export default async function CompanyDetailPage({
 
         {/* SEC Filings Section */}
         <section className="space-y-4">
-          <h2 className="text-xl font-bold text-white tracking-wide">Official SEC Filings</h2>
+          <h2 className="text-xl font-bold text-white tracking-wide">เอกสารรายงานทางการต่อ SEC</h2>
           {secFilings.length === 0 ? (
             <div className="bg-slate-800/40 border border-dashed border-slate-700 rounded-xl p-8 text-center text-slate-400 text-sm">
-              No SEC filings found for this company.
+              ไม่พบเอกสาร SEC สำหรับบริษัทนี้
             </div>
           ) : (
             <div className="overflow-x-auto rounded-xl border border-slate-700/70 bg-slate-800/80 shadow-lg">
               <table className="w-full text-left text-sm text-slate-300">
                 <thead className="bg-slate-900/80 text-xs uppercase font-semibold text-slate-400 border-b border-slate-700/70">
                   <tr>
-                    <th scope="col" className="px-6 py-4">Filing Type</th>
-                    <th scope="col" className="px-6 py-4">Filing Date</th>
-                    <th scope="col" className="px-6 py-4">Period End Date</th>
-                    <th scope="col" className="px-6 py-4">Document Link</th>
+                    <th scope="col" className="px-6 py-4">ประเภทเอกสาร</th>
+                    <th scope="col" className="px-6 py-4">วันที่ยื่นเอกสาร</th>
+                    <th scope="col" className="px-6 py-4">วันที่สิ้นสุดรอบบัญชี</th>
+                    <th scope="col" className="px-6 py-4">ลิงก์เอกสารฉบับเต็ม</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-700/50">
@@ -322,10 +322,10 @@ export default async function CompanyDetailPage({
                         </span>
                       </td>
                       <td className="px-6 py-4 text-slate-300">
-                        {new Date(filing.filing_date).toLocaleDateString()}
+                        {new Date(filing.filing_date).toLocaleDateString('th-TH')}
                       </td>
                       <td className="px-6 py-4 text-slate-400">
-                        {filing.period_end_date ? new Date(filing.period_end_date).toLocaleDateString() : 'N/A'}
+                        {filing.period_end_date ? new Date(filing.period_end_date).toLocaleDateString('th-TH') : 'ไม่มีข้อมูล'}
                       </td>
                       <td className="px-6 py-4">
                         {filing.document_url ? (
@@ -335,10 +335,10 @@ export default async function CompanyDetailPage({
                             rel="noopener noreferrer"
                             className="text-indigo-400 hover:text-indigo-300 underline font-medium text-xs flex items-center gap-1"
                           >
-                            View Filing Document ↗
+                            เปิดดูเอกสาร SEC ↗
                           </a>
                         ) : (
-                          <span className="text-slate-500 text-xs">No link available</span>
+                          <span className="text-slate-500 text-xs">ไม่มีลิงก์เอกสาร</span>
                         )}
                       </td>
                     </tr>

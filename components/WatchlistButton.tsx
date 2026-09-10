@@ -110,7 +110,7 @@ export const WatchlistButton: React.FC<WatchlistButtonProps> = ({
         disabled
         className={`px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-800 text-slate-500 text-xs font-semibold ${className}`}
       >
-        Loading...
+        กำลังโหลด...
       </button>
     )
   }
@@ -125,7 +125,7 @@ export const WatchlistButton: React.FC<WatchlistButtonProps> = ({
           : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-200 hover:text-white'
       } ${className}`}
     >
-      <span>{inWatchlist ? '★ In Watchlist' : '☆ Add to Watchlist'}</span>
+      <span>{inWatchlist ? '★ อยู่ในรายการโปรด' : '☆ เพิ่มในรายการโปรด'}</span>
     </button>
   )
 }
