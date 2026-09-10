@@ -56,7 +56,7 @@ export const Navbar: React.FC = () => {
 
           {user && (
             <nav className="hidden sm:flex items-center gap-4 text-sm font-medium">
-              <Link href="/" className="text-slate-300 hover:text-white transition-colors">
+              <Link href="/dashboard" className="text-slate-300 hover:text-white transition-colors">
                 Dashboard
               </Link>
               <Link href="/watchlist" className="text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1">
@@ -73,7 +73,7 @@ export const Navbar: React.FC = () => {
               {user ? (
                 <div className="flex items-center gap-3">
                   {/* User Profile Info */}
-                  <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700/80 rounded-full px-3 py-1.5">
+                  <Link href="/dashboard" className="flex items-center gap-2 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 rounded-full px-3 py-1.5 transition-colors">
                     {avatarUrl ? (
                       <Image
                         src={avatarUrl}
@@ -95,7 +95,7 @@ export const Navbar: React.FC = () => {
                         {user.email}
                       </p>
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Sign Out Button */}
                   <button
