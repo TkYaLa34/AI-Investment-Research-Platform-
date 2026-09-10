@@ -4,7 +4,7 @@ import { getCompanySubmissions } from '@/lib/sec/edgar'
 
 export interface AnalysisInput {
   company: Company
-  financials: Financials[]
+  fiคnancials: Financials[]
   earnings: Earnings[]
   secFilings: SecFiling[]
   liveEdgarFilingCount?: number
