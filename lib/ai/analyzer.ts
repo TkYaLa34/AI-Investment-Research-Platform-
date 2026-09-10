@@ -1,11 +1,13 @@
 import type { Company, Financials, Earnings, SecFiling, AiAnalysis, Database } from '@/types/database'
 import { createClient } from '@/lib/supabase/server'
+import { getCompanySubmissions } from '@/lib/sec/edgar'
 
 export interface AnalysisInput {
   company: Company
-  financials: Financials[]
+  fiคnancials: Financials[]
   earnings: Earnings[]
   secFilings: SecFiling[]
+  liveEdgarFilingCount?: number
   user_id?: string | null
 }
 
@@ -25,7 +27,7 @@ export interface GeneratedAnalysisOutput {
  * Synthesizes structured financial metrics and SEC filings into an AI investment analysis report.
  */
 export function generateAiAnalysis(input: AnalysisInput): GeneratedAnalysisOutput {
-  const { company, financials, earnings, secFilings } = input
+  const { company, financials, earnings, secFilings, liveEdgarFilingCount = 0 } = input
 
   const latestFinancial = financials[0]
   const latestEarnings = earnings[0]
@@ -41,9 +43,11 @@ export function generateAiAnalysis(input: AnalysisInput): GeneratedAnalysisOutpu
     ? `$${latestEarnings.eps_actual.toFixed(2)}`
     : 'N/A'
 
+  const totalIndexedFilings = Math.max(secFilings.length, liveEdgarFilingCount)
+
   const summary = `${company.name} (${company.ticker}) operates in the ${company.sector || 'General'} sector (${company.industry || 'N/A'}). Fundamental financial analysis indicates recent annual revenue of ${revenueDisplay} and net income of ${netIncomeDisplay}. Recent earnings performance showed an actual EPS of ${epsDisplay}.`
 
-  const bull_case = `1. Strong market leadership in ${company.industry || 'its primary industry'} with a market cap of ${company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'N/A'}.\n2. Robust revenue generation of ${revenueDisplay} backed by steady quarterly earnings execution.\n3. Institutional backing and active regulatory filings (${secFilings.length} filings indexed).`
+  const bull_case = `1. Strong market leadership in ${company.industry || 'its primary industry'} with a market cap of ${company.market_cap ? `$${(company.market_cap / 1e9).toFixed(2)}B` : 'N/A'}.\n2. Robust revenue generation of ${revenueDisplay} backed by steady quarterly earnings execution.\n3. Institutional backing and active regulatory filings (${totalIndexedFilings} filings indexed via SEC EDGAR).`
 
   const bear_case = `1. Sector volatility and competitive pressures in ${company.sector || 'the broader market'}.\n2. Dependence on macroeconomic stability and interest rate cycles impacting valuation multiples.\n3. Potential regulatory scrutiny as noted in official SEC 10-K/10-Q disclosures.`
 
@@ -51,7 +55,7 @@ export function generateAiAnalysis(input: AnalysisInput): GeneratedAnalysisOutpu
 
   const evidence = {
     sources: [
-      `Official SEC Filings (${secFilings.length} total indexed)`,
+      `Official SEC EDGAR Submissions API (${totalIndexedFilings} total indexed filings)`,
       `Income & Balance Sheet Data (Fiscal Year ${latestFinancial?.fiscal_year || 'Latest'})`,
       `Quarterly Earnings Reports (FY${latestEarnings?.fiscal_year || 'Latest'})`,
     ],
@@ -60,7 +64,7 @@ export function generateAiAnalysis(input: AnalysisInput): GeneratedAnalysisOutpu
       `Net Income: ${netIncomeDisplay}`,
       `Actual EPS: ${epsDisplay}`,
     ],
-    sec_filing_references: recentFilings.length > 0 ? recentFilings : ['No SEC filings referenced'],
+    sec_filing_references: recentFilings.length > 0 ? recentFilings : ['No database SEC filings referenced'],
   }
 
   return {
@@ -106,23 +110,35 @@ export async function analyzeAndSaveCompany(
     .eq('company_id', companyId)
     .order('fiscal_year', { ascending: false })
 
-  // 4. Fetch SEC Filings
+  // 4. Fetch Database SEC Filings
   const { data: secFilings } = await supabase
     .from('sec_filings')
     .select('*')
     .eq('company_id', companyId)
     .order('filing_date', { ascending: false })
 
-  // 5. Generate structured AI report
+  // 5. Query live SEC EDGAR API for recent submissions
+  let liveEdgarFilingCount = 0
+  try {
+    const edgarSubmissions = await getCompanySubmissions(company.ticker)
+    if (edgarSubmissions?.filings?.recent?.form) {
+      liveEdgarFilingCount = edgarSubmissions.filings.recent.form.length
+    }
+  } catch (err) {
+    console.warn(`Could not fetch live SEC EDGAR data for ${company.ticker}:`, err)
+  }
+
+  // 6. Generate structured AI report
   const analysisOutput = generateAiAnalysis({
     company: company as Company,
     financials: (financials as Financials[]) || [],
     earnings: (earnings as Earnings[]) || [],
     secFilings: (secFilings as SecFiling[]) || [],
+    liveEdgarFilingCount,
     user_id: userId,
   })
 
-  // 6. Save back to Supabase `ai_analyses` table
+  // 7. Save back to Supabase `ai_analyses` table
   const insertPayload: Database['public']['Tables']['ai_analyses']['Insert'] = {
     company_id: companyId,
     user_id: userId || null,
