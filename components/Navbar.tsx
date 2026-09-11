@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/Client'
+import { TickerSearch } from '@/components/TickerSearch'
 import type { User } from '@supabase/supabase-js'
 
 export const Navbar: React.FC = () => {
@@ -42,9 +43,9 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="border-b border-slate-800 bg-slate-900/90 backdrop-blur-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Logo / Brand & Nav Links */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center justify-between md:justify-start gap-8">
           <Link href="/" className="flex items-center gap-3 group">
             <span className="p-2 bg-indigo-600 rounded-lg text-white group-hover:bg-indigo-500 transition-colors">
               📡
@@ -66,8 +67,13 @@ export const Navbar: React.FC = () => {
           )}
         </div>
 
+        {/* Center Search Input */}
+        <div className="w-full md:max-w-md">
+          <TickerSearch />
+        </div>
+
         {/* User Navigation / Auth Badge */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 justify-end">
           {!loading && (
             <>
               {user ? (
