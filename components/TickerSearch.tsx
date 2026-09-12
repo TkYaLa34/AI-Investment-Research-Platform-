@@ -82,52 +82,6 @@ export const TickerSearch: React.FC<TickerSearchProps> = ({
     }
   }
 
-  // Load search history from localStorage on client side mount
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        const parsed = JSON.parse(stored)
-        if (Array.isArray(parsed)) {
-          setSearchHistory(parsed)
-        }
-      }
-    } catch (e) {
-      console.error('Failed to parse search history from localStorage:', e)
-    }
-  }, [])
-
-  // Save item to history (up to 5 items max)
-  const addToHistory = (item: FinnhubSearchResult) => {
-    try {
-      setSearchHistory((prev) => {
-        const filtered = prev.filter(
-          (h) => h.symbol.toUpperCase() !== item.symbol.toUpperCase()
-        )
-        const updated = [item, ...filtered].slice(0, 5)
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-        } catch (err) {
-          console.error('Failed to save search history to localStorage:', err)
-        }
-        return updated
-      })
-    } catch (e) {
-      console.error('Failed to save search history:', e)
-    }
-  }
-
-  // Clear all search history
-  const clearHistory = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    setSearchHistory([])
-    try {
-      localStorage.removeItem(STORAGE_KEY)
-    } catch (e) {
-      console.error('Failed to clear search history from localStorage:', e)
-    }
-  }
-
   // Debounced API search execution
   const fetchSearchResults = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {
