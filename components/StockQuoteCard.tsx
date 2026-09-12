@@ -1,9 +1,10 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useStock } from '@/context/StockContext'
 
 interface StockQuoteCardProps {
-  symbol: string
+  symbol?: string
   className?: string
 }
 
@@ -18,15 +19,18 @@ interface QuoteData {
 }
 
 export const StockQuoteCard: React.FC<StockQuoteCardProps> = ({
-  symbol,
+  symbol: propSymbol,
   className = '',
 }) => {
+  const stockContext = useStock()
+  const activeSymbol = propSymbol || stockContext?.selectedSymbol || 'AAPL'
+
   const [quote, setQuote] = useState<QuoteData | null>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!symbol) return
+    if (!activeSymbol) return
 
     let isMounted = true
     setLoading(true)
@@ -34,7 +38,7 @@ export const StockQuoteCard: React.FC<StockQuoteCardProps> = ({
 
     const fetchQuote = async () => {
       try {
-        const res = await fetch(`/api/quote?symbol=${encodeURIComponent(symbol)}`)
+        const res = await fetch(`/api/quote?symbol=${encodeURIComponent(activeSymbol)}`)
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`)
         }
@@ -56,7 +60,7 @@ export const StockQuoteCard: React.FC<StockQuoteCardProps> = ({
     return () => {
       isMounted = false
     }
-  }, [symbol])
+  }, [activeSymbol])
 
   if (loading) {
     return (
@@ -74,7 +78,7 @@ export const StockQuoteCard: React.FC<StockQuoteCardProps> = ({
   if (error || !quote) {
     return (
       <div className={`bg-slate-800/60 border border-slate-700 rounded-2xl p-6 text-center text-slate-400 text-xs ${className}`}>
-        ไม่สามารถโหลดราคาตลาดสำหรับ {symbol} ({error || 'ไม่มีข้อมูล'})
+        ไม่สามารถโหลดราคาตลาดสำหรับ {activeSymbol} ({error || 'ไม่มีข้อมูล'})
       </div>
     )
   }
@@ -90,7 +94,7 @@ export const StockQuoteCard: React.FC<StockQuoteCardProps> = ({
       <div className="flex items-start justify-between gap-4">
         <div>
           <span className="px-2.5 py-0.5 bg-indigo-500/20 border border-indigo-500/40 text-indigo-300 font-mono text-xs font-extrabold rounded">
-            {symbol.toUpperCase()}
+            {activeSymbol.toUpperCase()}
           </span>
           <p className="text-xs text-slate-400 mt-1">ราคาตลาดสด (Real-time Market Quote)</p>
         </div>

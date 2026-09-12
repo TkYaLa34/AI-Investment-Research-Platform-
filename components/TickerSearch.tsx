@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { FinnhubSearchResult } from '@/lib/finnhub'
+import { useStock } from '@/context/StockContext'
 
 interface TickerSearchProps {
   className?: string
@@ -33,6 +34,7 @@ export const TickerSearch: React.FC<TickerSearchProps> = ({
   const [searchHistory, setSearchHistory] = useState<FinnhubSearchResult[]>([])
   const router = useRouter()
   const containerRef = useRef<HTMLDivElement>(null)
+  const { setSelectedSymbol } = useStock()
 
   // Load search history from localStorage on client side mount
   useEffect(() => {
@@ -126,6 +128,7 @@ export const TickerSearch: React.FC<TickerSearchProps> = ({
 
   const handleSelectResult = (item: FinnhubSearchResult) => {
     addToHistory(item)
+    setSelectedSymbol(item.symbol.toUpperCase())
     setIsOpen(false)
     setQuery('')
     router.push(`/company/${item.symbol.toLowerCase()}`)
