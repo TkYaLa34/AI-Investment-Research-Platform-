@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Navbar } from '@/components/Navbar'
+import { StockProvider } from '@/context/StockContext'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -15,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="th">
       <body className="min-h-screen bg-slate-900 text-slate-100 antialiased flex flex-col">
-        <Navbar />
-        <main className="flex-1">
-          {children}
-        </main>
+        <StockProvider>
+          <Navbar />
+          <main className="flex-1">
+            {children}
+          </main>
+        </StockProvider>
       </body>
     </html>
   )
