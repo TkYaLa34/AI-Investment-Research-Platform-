@@ -24,6 +24,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
   const activeSymbol = propSymbol || stockContext?.selectedSymbol || 'AAPL'
 
   const [insights, setInsights] = useState<AIInsightsData | null>(null)
+  const [source, setSource] = useState<string>('ai')
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -36,13 +37,16 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
 
     const fetchInsights = async () => {
       try {
-        const res = await fetch(`/api/insights?symbol=${encodeURIComponent(activeSymbol)}`)
+        const res = await fetch(`/api/ai-insights?symbol=${encodeURIComponent(activeSymbol)}`)
         if (!res.ok) {
           throw new Error(`HTTP ${res.status}`)
         }
         const json = await res.json()
         if (json.success && json.data) {
-          if (isMounted) setInsights(json.data)
+          if (isMounted) {
+            setInsights(json.data)
+            setSource(json.source || 'gemini')
+          }
         } else {
           throw new Error(json.error || 'Failed to fetch AI insights')
         }
@@ -63,11 +67,15 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
   if (loading) {
     return (
       <div className={`bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 shadow-xl animate-pulse space-y-4 ${className}`}>
-        <div className="h-6 bg-slate-700 rounded w-1/3"></div>
+        <div className="flex items-center justify-between">
+          <div className="h-6 bg-slate-700 rounded w-1/3"></div>
+          <div className="h-4 bg-slate-700 rounded w-1/6"></div>
+        </div>
         <div className="h-4 bg-slate-700 rounded w-3/4"></div>
-        <div className="space-y-2 pt-2">
-          <div className="h-3 bg-slate-700 rounded w-5/6"></div>
-          <div className="h-3 bg-slate-700 rounded w-2/3"></div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div className="h-24 bg-slate-700/60 rounded-xl"></div>
+          <div className="h-24 bg-slate-700/60 rounded-xl"></div>
+          <div className="h-24 bg-slate-700/60 rounded-xl"></div>
         </div>
       </div>
     )
@@ -91,18 +99,19 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
           </span>
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              AI Insights ({insights.symbol})
+              Gemini AI Insights ({insights.symbol})
             </h3>
-            <p className="text-xs text-slate-400">สรุปการวิเคราะห์สภาวะตลาดและปัจจัยความเสี่ยงโดย AI</p>
+            <p className="text-xs text-slate-400">การวิเคราะห์สภาวะตลาด ปัจจัยเสี่ยง และไฮไลท์โดย Google Gen AI</p>
           </div>
         </div>
-        <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-full">
-          สด
+        <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-full flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          {source === 'gemini-2.5-flash' ? 'Gemini 2.5 Flash' : 'AI Engine'}
         </span>
       </div>
 
       {/* Summary Banner */}
-      <div className="p-3.5 bg-indigo-950/40 border border-indigo-500/30 rounded-xl text-xs text-indigo-200 font-medium">
+      <div className="p-3.5 bg-indigo-950/40 border border-indigo-500/30 rounded-xl text-xs text-indigo-200 font-medium leading-relaxed">
         💡 {insights.summary}
       </div>
 
