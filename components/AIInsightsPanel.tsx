@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useStock } from '@/context/StockContext'
 
 interface AIInsightsData {
@@ -28,41 +28,34 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+  const fetchInsights = useCallback(async () => {
     if (!activeSymbol) return
 
-    let isMounted = true
     setLoading(true)
     setError(null)
 
-    const fetchInsights = async () => {
-      try {
-        const res = await fetch(`/api/ai-insights?symbol=${encodeURIComponent(activeSymbol)}`)
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`)
-        }
-        const json = await res.json()
-        if (json.success && json.data) {
-          if (isMounted) {
-            setInsights(json.data)
-            setSource(json.source || 'gemini')
-          }
-        } else {
-          throw new Error(json.error || 'Failed to fetch AI insights')
-        }
-      } catch (err: any) {
-        if (isMounted) setError(err.message || 'Error loading AI insights')
-      } finally {
-        if (isMounted) setLoading(false)
+    try {
+      const res = await fetch(`/api/ai-insights?symbol=${encodeURIComponent(activeSymbol)}`)
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ไม่สามารถดึงข้อมูลรายงาน AI ได้`)
       }
-    }
-
-    fetchInsights()
-
-    return () => {
-      isMounted = false
+      const json = await res.json()
+      if (json.success && json.data) {
+        setInsights(json.data)
+        setSource(json.source || 'gemini')
+      } else {
+        throw new Error(json.error || 'Failed to fetch AI insights')
+      }
+    } catch (err: any) {
+      setError(err.message || 'เกิดข้อผิดพลาดในการโหลดบทวิเคราะห์ AI')
+    } finally {
+      setLoading(false)
     }
   }, [activeSymbol])
+
+  useEffect(() => {
+    fetchInsights()
+  }, [fetchInsights])
 
   if (loading) {
     return (
@@ -83,8 +76,21 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
 
   if (error || !insights) {
     return (
-      <div className={`bg-slate-800/60 border border-slate-700 rounded-2xl p-6 text-center text-slate-400 text-xs ${className}`}>
-        ไม่สามารถโหลดข้อมูลวิเคราะห์ AI สำหรับ {activeSymbol} ({error || 'ไม่มีข้อมูล'})
+      <div className={`bg-slate-800/80 border border-slate-700/80 rounded-2xl p-6 text-center space-y-3 ${className}`}>
+        <div className="text-xl">⚠️</div>
+        <p className="text-sm font-semibold text-slate-200">
+          ไม่สามารถโหลดข้อมูลวิเคราะห์ AI สำหรับ {activeSymbol}
+        </p>
+        <p className="text-xs text-rose-400 font-mono">
+          {error || 'เกิดข้อผิดพลาดในการเชื่อมต่อระบบประมวลผล'}
+        </p>
+        <button
+          type="button"
+          onClick={fetchInsights}
+          className="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs py-2 px-4 rounded-xl transition-colors shadow-md mt-2"
+        >
+          🔄 ลองใหม่อีกครั้ง (Retry)
+        </button>
       </div>
     )
   }
