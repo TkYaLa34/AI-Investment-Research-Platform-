@@ -131,7 +131,7 @@ export const TickerSearch: React.FC<TickerSearchProps> = ({
     setSelectedSymbol(item.symbol.toUpperCase())
     setIsOpen(false)
     setQuery('')
-    router.push(`/company/${item.symbol.toLowerCase()}`)
+    router.push(`/stocks/${item.symbol.toLowerCase()}`)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
