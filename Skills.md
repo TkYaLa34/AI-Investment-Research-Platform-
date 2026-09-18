@@ -36,7 +36,31 @@ This document outlines the core technical standards, conventions, and architectu
 
 ---
 
-## 3. Localization & Domain Conventions
+## 3. Fundamental Financial Analysis & SEC Filings
+
+### **Interpreting Primary SEC Filings (10-K, 10-Q, 8-K)**
+* **10-K (Annual Reports):** Source for audited annual financial statements, comprehensive MD&A (Management's Discussion and Analysis), risk factors, and long-term debt schedules.
+* **10-Q (Quarterly Reports):** Source for unaudited quarterly results, sequential performance shifts, and seasonal working capital changes.
+* **8-K (Current Reports):** Source for material corporate events (earnings releases, executive changes, M&A, structural refinancing).
+
+### **Key Metrics Mapping Standard**
+* **Revenue (Total Net Sales):** Extracted directly from Income Statement top-line numbers.
+* **Net Income (Net Earnings):** Extracted from bottom-line earnings after tax and operating expenses.
+* **EPS (Diluted Earnings Per Share):** Map diluted EPS to account for stock-based compensation and convertible securities.
+* **Free Cash Flow (FCF):** Calculated strictly as `Operating Cash Flow - Capital Expenditures (CapEx)`.
+
+### **DCF Valuation Model Parameters**
+* **Discount Rate (WACC):** Weighted Average Cost of Capital parameters should be explicit (typically 8.0% - 10.5% for mega-cap equities).
+* **Terminal Growth Rate:** Long-term perpetual growth rate capped at sustainable GDP growth rates (typically 2.0% - 3.0%).
+* **Margin of Safety:** Display intrinsic value comparison relative to current market price with clear discount/premium percentages.
+
+### **Primary Source References & Disclosure Notes**
+* Every financial data table or AI fundamental insight must include a direct link to the underlying SEC EDGAR document (e.g., `https://www.sec.gov/Archives/edgar/data/...`) or accession number reference.
+* Provide clear disclosure notes when financial metrics are estimated, annualized, or derived from mock/fallback datasets.
+
+---
+
+## 4. Localization & Domain Conventions
 
 * **Thai UI & English Terminology:** Interface labels, summaries, and instructions should be localized in professional Thai, while preserving standard English financial terms (e.g., *Common Stock, ETF, Gross Margin, Net Income, Free Cash Flow, Moving Average, P/E Ratio*).
 * **Currency & Metrics:** Format monetary values clearly (e.g., `$125.50`, `$383.00B`) and include explicit sign indicators (`+` / `-`) for price performance badges.
