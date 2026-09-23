@@ -3,14 +3,29 @@
 import React, { useState } from 'react'
 import { createClient } from '@/lib/supabase/Client'
 
+type AuthMethod = 'password' | 'magic'
+type PasswordMode = 'signin' | 'signup'
+
 export default function LoginPage() {
+  const [authMethod, setAuthMethod] = useState<AuthMethod>('password')
+  const [passwordMode, setPasswordMode] = useState<PasswordMode>('signin')
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+
+  const clearMessages = () => {
+    setErrorMessage(null)
+    setSuccessMessage(null)
+  }
 
   const handleGoogleSignIn = async () => {
     try {
+      clearMessages()
       setLoading(true)
-      setErrorMessage(null)
       const supabase = createClient()
 
       const { error } = await supabase.auth.signInWithOAuth({
@@ -25,6 +40,83 @@ export default function LoginPage() {
       }
     } catch (err: any) {
       setErrorMessage(err?.message || 'เกิดข้อผิดพลาดไม่คาดคิดขณะเข้าสู่ระบบ')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleEmailPasswordAuth = async (e: React.FormEvent) => {
+    e.preventDefault()
+    clearMessages()
+
+    if (!email.trim() || !password.trim()) {
+      setErrorMessage('กรุณากรอกอีเมลและรหัสผ่านให้ครบถ้วน')
+      return
+    }
+
+    try {
+      setLoading(true)
+      const supabase = createClient()
+
+      if (passwordMode === 'signin') {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password,
+        })
+        if (error) {
+          setErrorMessage(error.message === 'Invalid login credentials' ? 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' : error.message)
+        } else {
+          setSuccessMessage('เข้าสู่ระบบสำเร็จ กำลังนำคุณไปยังหน้าหลัก...')
+          window.location.href = '/dashboard'
+        }
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email: email.trim(),
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}/auth/callback`,
+          },
+        })
+        if (error) {
+          setErrorMessage(error.message)
+        } else {
+          setSuccessMessage('สมัครสมาชิกสำเร็จ! กรุณาตรวจสอบอีเมลของคุณเพื่อยืนยัน บัญชี')
+        }
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'เกิดข้อผิดพลาดขณะดำเนินการ')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleMagicLinkAuth = async (e: React.FormEvent) => {
+    e.preventDefault()
+    clearMessages()
+
+    if (!email.trim()) {
+      setErrorMessage('กรุณากรอกอีเมลสำหรับรับ Magic Link')
+      return
+    }
+
+    try {
+      setLoading(true)
+      const supabase = createClient()
+
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+        },
+      })
+
+      if (error) {
+        setErrorMessage(error.message)
+      } else {
+        setSuccessMessage('ส่ง Magic Link เรียบร้อยแล้ว! กรุณาตรวจสอบกล่องจดหมายในอีเมลของคุณ')
+      }
+    } catch (err: any) {
+      setErrorMessage(err?.message || 'เกิดข้อผิดพลาดขณะส่ง Magic Link')
     } finally {
       setLoading(false)
     }
@@ -46,18 +138,166 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {/* Error Notification */}
+        {/* Auth Method Tabs */}
+        <div className="flex bg-slate-900/80 p-1 rounded-xl border border-slate-700/60 text-xs font-semibold">
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMethod('password')
+              clearMessages()
+            }}
+            className={`flex-1 py-2 rounded-lg transition-all ${
+              authMethod === 'password'
+                ? 'bg-indigo-600 text-white shadow'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            🔑 อีเมล & รหัสผ่าน
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAuthMethod('magic')
+              clearMessages()
+            }}
+            className={`flex-1 py-2 rounded-lg transition-all ${
+              authMethod === 'magic'
+                ? 'bg-indigo-600 text-white shadow'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            ✨ Magic Link
+          </button>
+        </div>
+
+        {/* Notifications */}
         {errorMessage && (
           <div className="bg-rose-950/40 border border-rose-500/50 rounded-xl p-3.5 text-xs text-rose-300 text-center font-medium">
-            {errorMessage}
+            ⚠️ {errorMessage}
+          </div>
+        )}
+        {successMessage && (
+          <div className="bg-emerald-950/40 border border-emerald-500/50 rounded-xl p-3.5 text-xs text-emerald-300 text-center font-medium">
+            ✅ {successMessage}
           </div>
         )}
 
-        {/* Google Sign In Button */}
+        {/* Form 1: Email & Password */}
+        {authMethod === 'password' && (
+          <form onSubmit={handleEmailPasswordAuth} className="space-y-4">
+            {/* Mode Switch: Sign In vs Sign Up */}
+            <div className="flex justify-center gap-4 text-xs font-medium border-b border-slate-700/50 pb-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setPasswordMode('signin')
+                  clearMessages()
+                }}
+                className={`pb-1 ${
+                  passwordMode === 'signin'
+                    ? 'text-indigo-400 font-bold border-b-2 border-indigo-500'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                เข้าสู่ระบบ (Sign In)
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPasswordMode('signup')
+                  clearMessages()
+                }}
+                className={`pb-1 ${
+                  passwordMode === 'signup'
+                    ? 'text-indigo-400 font-bold border-b-2 border-indigo-500'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                สมัครสมาชิก (Sign Up)
+              </button>
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs text-slate-300 font-medium">อีเมล (Email)</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              />
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs text-slate-300 font-medium">รหัสผ่าน (Password)</label>
+              <input
+                type="password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg transition-all text-sm disabled:opacity-50"
+            >
+              {loading
+                ? 'กำลังดำเนินการ...'
+                : passwordMode === 'signin'
+                ? 'เข้าสู่ระบบด้วยอีเมล'
+                : 'สร้างบัญชีใหม่'}
+            </button>
+          </form>
+        )}
+
+        {/* Form 2: Magic Link */}
+        {authMethod === 'magic' && (
+          <form onSubmit={handleMagicLinkAuth} className="space-y-4">
+            <div className="space-y-1">
+              <label className="text-xs text-slate-300 font-medium">อีเมลของคุณ (Email Address)</label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                className="w-full px-3.5 py-2.5 bg-slate-900/80 border border-slate-700 rounded-xl text-slate-100 placeholder-slate-500 text-sm focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+              />
+              <p className="text-[11px] text-slate-400 mt-1">
+                เราจะส่งลิงก์สำหรับเข้าสู่ระบบแบบไม่ต้องใช้รหัสผ่านไปยังกล่องจดหมายของคุณ
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-4 rounded-xl shadow-lg transition-all text-sm disabled:opacity-50"
+            >
+              {loading ? 'กำลังส่ง Magic Link...' : '✨ ส่ง Magic Link เข้าสู่ระบบ'}
+            </button>
+          </form>
+        )}
+
+        {/* Divider */}
+        <div className="relative flex items-center justify-center my-2">
+          <div className="border-t border-slate-700/60 w-full"></div>
+          <span className="bg-slate-800 px-3 text-[11px] text-slate-400 uppercase font-semibold relative">
+            หรือ
+          </span>
+        </div>
+
+        {/* Google OAuth Button */}
         <button
+          type="button"
           onClick={handleGoogleSignIn}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-100 text-slate-900 font-semibold py-3 px-4 rounded-xl shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+          className="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-100 text-slate-900 font-semibold py-2.5 px-4 rounded-xl shadow-lg transition-all duration-200 disabled:opacity-50 text-sm"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
