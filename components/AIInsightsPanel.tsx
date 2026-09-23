@@ -42,7 +42,7 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
       const json = await res.json()
       if (json.success && json.data) {
         setInsights(json.data)
-        setSource(json.source || 'gemini')
+        setSource(json.source || 'openai')
       } else {
         throw new Error(json.error || 'Failed to fetch AI insights')
       }
@@ -105,14 +105,14 @@ export const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
           </span>
           <div>
             <h3 className="text-base font-bold text-white flex items-center gap-2">
-              Gemini AI Insights ({insights.symbol})
+              OpenAI Insights ({insights.symbol})
             </h3>
-            <p className="text-xs text-slate-400">การวิเคราะห์สภาวะตลาด ปัจจัยเสี่ยง และไฮไลท์โดย Google Gen AI</p>
+            <p className="text-xs text-slate-400">การวิเคราะห์สภาวะตลาด ปัจจัยเสี่ยง และไฮไลท์โดย OpenAI</p>
           </div>
         </div>
         <span className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold rounded-full flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          {source === 'gemini-2.5-flash' ? 'Gemini 2.5 Flash' : 'AI Engine'}
+          {source === 'gpt-4o-mini' ? 'OpenAI GPT-4o-mini' : 'AI Engine'}
         </span>
       </div>
 

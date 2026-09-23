@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { GoogleGenAI } from '@google/genai'
+import OpenAI from 'openai'
 
 export async function GET(request: Request) {
   try {
@@ -7,10 +7,10 @@ export async function GET(request: Request) {
     const symbol = searchParams.get('symbol') || 'AAPL'
     const cleanSymbol = symbol.toUpperCase()
 
-    const apiKey = process.env.GEMINI_API_KEY
+    const apiKey = process.env.OPENAI_API_KEY
 
     if (!apiKey) {
-      // Fallback structured AI response when GEMINI_API_KEY is not configured
+      // Fallback structured AI response when OPENAI_API_KEY is not configured
       return NextResponse.json({
         success: true,
         source: 'fallback',
@@ -35,7 +35,7 @@ export async function GET(request: Request) {
       })
     }
 
-    const ai = new GoogleGenAI({ apiKey })
+    const openai = new OpenAI({ apiKey })
 
     const prompt = `คุณคือผู้เชี่ยวชาญการวิเคราะห์หุ้นสถาบันระดับโลก โปรดวิเคราะห์หุ้นหรือ ETF ชื่อย่อ "${cleanSymbol}"
 ให้คำตอบเป็น JSON ในรูปแบบนี้เท่านั้น:
@@ -47,30 +47,35 @@ export async function GET(request: Request) {
 }
 ใช้ภาษาไทยที่เป็นทางการ ผสมผสานกับคำศัพท์การเงินภาษาอังกฤษมาตรฐาน (เช่น Gross Margin, Moving Average, P/E Ratio)`
 
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a professional financial analyst assistant providing structured JSON responses in Thai.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      response_format: { type: 'json_object' },
     })
 
-    const text = response.text || ''
-    const jsonMatch = text.match(/\{[\s\S]*\}/)
+    const text = response.choices[0]?.message?.content || ''
+    const parsed = JSON.parse(text)
 
-    if (jsonMatch) {
-      const parsed = JSON.parse(jsonMatch[0])
-      return NextResponse.json({
-        success: true,
-        source: 'gemini-2.5-flash',
-        data: {
-          symbol: cleanSymbol,
-          summary: parsed.summary,
-          marketTrends: parsed.marketTrends,
-          riskAssessment: parsed.riskAssessment,
-          keyHighlights: parsed.keyHighlights,
-        },
-      })
-    }
-
-    throw new Error('Failed to parse Gemini response JSON')
+    return NextResponse.json({
+      success: true,
+      source: 'gpt-4o-mini',
+      data: {
+        symbol: cleanSymbol,
+        summary: parsed.summary,
+        marketTrends: parsed.marketTrends,
+        riskAssessment: parsed.riskAssessment,
+        keyHighlights: parsed.keyHighlights,
+      },
+    })
   } catch (error: any) {
     console.error('API /api/ai-insights Error:', error)
     return NextResponse.json(
